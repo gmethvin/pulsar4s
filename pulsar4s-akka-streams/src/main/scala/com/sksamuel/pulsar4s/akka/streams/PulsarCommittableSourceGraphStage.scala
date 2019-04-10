@@ -21,6 +21,7 @@ import scala.util.Success
 
 trait CommittableMessage[T] {
   def ack(cumulative: Boolean = false): Future[Done]
+  def nack(): Unit
   def message: ConsumerMessage[T]
 }
 
@@ -61,6 +62,10 @@ class PulsarCommittableSourceGraphStage[T](create: () => Consumer[T], seek: Opti
                 consumer.acknowledgeAsync(msg.messageId)
               }
               ackFuture.map(_ => Done)
+            }
+            override def nack(): Unit = {
+              logger.debug(s"Negatively acknowledging message: $msg")
+              consumer.negativeAcknowledge(msg.messageId)
             }
           })
         case Failure(e) =>

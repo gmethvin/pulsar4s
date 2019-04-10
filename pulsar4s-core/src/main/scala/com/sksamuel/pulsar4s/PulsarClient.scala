@@ -142,6 +142,7 @@ class DefaultPulsarClient(client: org.apache.pulsar.client.api.PulsarClient) ext
     config.cryptoFailureAction.foreach(builder.cryptoFailureAction)
     config.cryptoKeyReader.foreach(builder.cryptoKeyReader)
     config.maxTotalReceiverQueueSizeAcrossPartitions.foreach(builder.maxTotalReceiverQueueSizeAcrossPartitions)
+    config.negativeAckRedeliveryDelay.foreach { d => builder.negativeAckRedeliveryDelay(d._1, d._2) }
     config.patternAutoDiscoveryPeriod.foreach(builder.patternAutoDiscoveryPeriod)
     config.priorityLevel.foreach(builder.priorityLevel)
     config.receiverQueueSize.foreach(builder.receiverQueueSize)
