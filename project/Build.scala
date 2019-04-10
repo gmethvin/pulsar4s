@@ -10,7 +10,7 @@ object Build extends AutoPlugin {
   override def requires = JvmPlugin
 
   object autoImport {
-    val org                       = "com.sksamuel.pulsar4s"
+    val org                       = "com.iterable.pulsar4s"
     val AkkaStreamVersion         = "2.5.21"
     val CatsEffectVersion         = "1.2.0"
     val CirceVersion              = "0.11.1"
