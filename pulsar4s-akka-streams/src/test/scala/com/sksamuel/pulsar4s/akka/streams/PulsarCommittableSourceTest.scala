@@ -93,8 +93,7 @@ class PulsarCommittableSourceTest extends FunSuite with Matchers {
       .take(4)
       .mapAsync(10) { msg =>
         if (msg.message.value < "c") {
-          msg.nack()
-          Future.successful(Vector.empty)
+          msg.nack().map(_ => Vector.empty)
         } else {
           msg.ack().map(_ => Vector(msg.message))
         }
