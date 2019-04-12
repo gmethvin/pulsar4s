@@ -66,7 +66,7 @@ trait Consumer[T] extends Closeable {
   def acknowledgeAsync[F[_] : AsyncHandler](messageId: MessageId): F[Unit]
 
   final def negativeAcknowledgeAsync[F[_] : AsyncHandler](message: ConsumerMessage[T]): F[Unit] =
-    acknowledgeAsync(message.messageId)
+    negativeAcknowledgeAsync(message.messageId)
 
   def negativeAcknowledgeAsync[F[_] : AsyncHandler](messageId: MessageId): F[Unit]
 
