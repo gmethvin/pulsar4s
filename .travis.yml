@@ -18,11 +18,11 @@ before_script:
   - sudo chmod +x /usr/local/bin/sbt
 
 before_install:
-  - docker run -d -it -p 6650:6650 -p 8080:8080 -v $PWD/data:/pulsar/data streamlio/pulsar:2.4.0-streamlio-9 bin/pulsar standalone --advertised-address 127.0.0.1
+  - docker run -d -it -p 6650:6650 -p 8080:8080 -v $PWD/data:/pulsar/data streamlio/pulsar:2.4.0-streamlio-22 bin/pulsar standalone --advertised-address 127.0.0.1
 
 scala:
 - 2.11.12
-- 2.12.6
+- 2.12.8
 
 script:
 - sbt clean test

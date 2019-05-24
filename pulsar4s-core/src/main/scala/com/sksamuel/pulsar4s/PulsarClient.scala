@@ -2,6 +2,7 @@ package com.sksamuel.pulsar4s
 
 import java.util.UUID
 import java.util.concurrent.TimeUnit
+import java.util.{Set => JSet}
 
 import com.sksamuel.exts.Logging
 import org.apache.pulsar.client.api
@@ -42,6 +43,7 @@ trait ConsumerInterceptor[T] extends AutoCloseable {
   def onError(messageId: MessageId, throwable: Throwable): Unit
   def onAckCumulative(messageId: MessageId): Unit
   def onErrorCumulative(messageId: MessageId, throwable: Throwable): Unit
+  def onNegativeAcksSend(messageIds: Set[MessageId]): Unit
 }
 
 class ConsumerInterceptorAdapter[T](interceptor: ConsumerInterceptor[T], schema: Schema[T]) extends api.ConsumerInterceptor[T] {
@@ -59,6 +61,10 @@ class ConsumerInterceptorAdapter[T](interceptor: ConsumerInterceptor[T], schema:
 
   override def onAcknowledgeCumulative(consumer: api.Consumer[T], messageId: JMessageId, throwable: Throwable): Unit = {
     if (throwable == null) interceptor.onAckCumulative(MessageId.fromJava(messageId)) else interceptor.onErrorCumulative(MessageId.fromJava(messageId), throwable)
+  }
+
+  override def onNegativeAcksSend(consumer: JConsumer[T], set: JSet[JMessageId]): Unit = {
+    interceptor.onNegativeAcksSend(set.asScala.map(MessageId.fromJava).toSet)
   }
 }
 
