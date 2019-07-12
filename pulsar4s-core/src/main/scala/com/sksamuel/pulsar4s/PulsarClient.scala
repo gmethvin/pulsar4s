@@ -44,6 +44,7 @@ trait ConsumerInterceptor[T] extends AutoCloseable {
   def onAckCumulative(messageId: MessageId): Unit
   def onErrorCumulative(messageId: MessageId, throwable: Throwable): Unit
   def onNegativeAcksSend(messageIds: Set[MessageId]): Unit
+  def onAckTimeoutSend(messageIds: Set[MessageId]): Unit
 }
 
 class ConsumerInterceptorAdapter[T](interceptor: ConsumerInterceptor[T], schema: Schema[T]) extends api.ConsumerInterceptor[T] {
@@ -65,6 +66,10 @@ class ConsumerInterceptorAdapter[T](interceptor: ConsumerInterceptor[T], schema:
 
   override def onNegativeAcksSend(consumer: JConsumer[T], set: JSet[JMessageId]): Unit = {
     interceptor.onNegativeAcksSend(set.asScala.map(MessageId.fromJava).toSet)
+  }
+
+  override def onAckTimeoutSend(consumer: JConsumer[T], set: JSet[JMessageId]): Unit = {
+    interceptor.onAckTimeoutSend(set.asScala.map(MessageId.fromJava).toSet)
   }
 }
 
@@ -94,7 +99,6 @@ object PulsarClient {
     config.authentication.foreach(builder.authentication)
     config.connectionsPerBroker.foreach(builder.connectionsPerBroker)
     config.enableTcpNoDelay.foreach(builder.enableTcpNoDelay)
-    config.enableTls.foreach(builder.enableTls)
     config.enableTlsHostnameVerification.foreach(builder.enableTlsHostnameVerification)
     config.ioThreads.foreach(builder.ioThreads)
     config.listenerThreads.foreach(builder.listenerThreads)

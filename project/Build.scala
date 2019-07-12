@@ -20,7 +20,7 @@ object Build extends AutoPlugin {
     val Log4jVersion              = "2.11.2"
     val MonixVersion              = "2.3.3"
     val PlayJsonVersion           = "2.7.1"
-    val PulsarVersion             = "2.4.0-streamlio-24"
+    val PulsarVersion             = "2.4.0"
     val ReactiveStreamsVersion    = "1.0.2"
     val Json4sVersion             = "3.6.5"
     val ScalaVersion              = "2.11.12"
@@ -41,7 +41,7 @@ object Build extends AutoPlugin {
     scalaVersion := ScalaVersion,
     crossScalaVersions := Seq(ScalaVersion, "2.12.8"),
     publishMavenStyle := true,
-    resolvers ++= Seq(Resolver.mavenLocal, "streamlio" at "https://maven.streamlio.com/"),
+    resolvers ++= Seq(Resolver.mavenLocal),
     fork in Test := true,
     javaOptions ++= Seq("-Xms512M", "-Xmx2048M", "-XX:MaxPermSize=2048M", "-XX:+CMSClassUnloadingEnabled"),
     publishArtifact in Test := false,
