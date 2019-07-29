@@ -143,7 +143,6 @@ class ProducerMessageBuilder[T](producer: JProducer[T]) {
     import scala.collection.JavaConverters._
     val builder = producer.newMessage().value(msg.value)
     msg.deliverAt.foreach { da =>
-      println(s"setting deliverAt to $da (current time ${System.currentTimeMillis})")
       builder.deliverAt(da)
     }
     msg.key.foreach(builder.key)
